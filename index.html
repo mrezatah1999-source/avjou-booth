@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Avjou | Cosmoprof 2026 Pre-Order</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --surface: #F3F6FA;
+      --surface-2: #E8EDF4;
+      --border: #D4DBE5;
+      --blue: #6BAED6;
+      --blue-dark: #4A8FBA;
+      --blue-dim: #A0C8E4;
+      --text: #0F1214;
+      --muted: #6B7B8C;
+      --success: #3D9B7A;
+      --error: #C0392B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; padding-bottom: 120px; }
+
+    #setupScreen, #mainForm, #successScreen, #adminPanel { display: none; }
+
+    /* ======= SETUP ======= */
+    #setupScreen { flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 32px 20px; text-align: center; background: var(--bg); }
+    .setup-logo { font-family: 'Playfair Display', Georgia, serif; font-size: 30px; letter-spacing: 0.18em; color: var(--blue); margin-bottom: 6px; }
+    .setup-sub { color: var(--muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 48px; }
+    .setup-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 32px 28px; width: 100%; max-width: 460px; text-align: left; }
+    .setup-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .setup-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+    .setup-input { width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 13px 15px; color: var(--text); font-size: 12px; font-family: monospace; margin-bottom: 14px; outline: none; transition: border-color 0.2s; }
+    .setup-input:focus { border-color: var(--blue); }
+    .setup-input::placeholder { color: var(--muted); }
+    .btn-blue { width: 100%; background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 14px; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; transition: opacity 0.2s; }
+    .btn-blue:active { opacity: 0.8; }
+
+    /* ======= HEADER ======= */
+    .top-bar { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #fff; }
+    .brand { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; letter-spacing: 0.16em; color: var(--blue); }
+    .event-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+    .orders-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 7px 14px; border-radius: 6px; cursor: pointer; letter-spacing: 0.04em; font-family: inherit; }
+
+    /* ======= SECTIONS ======= */
+    .section { padding: 20px; border-bottom: 1px solid var(--border); }
+    .section-label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue-dark); margin-bottom: 14px; font-weight: 700; }
+    .fields-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .fields-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .fields-row-4 { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; }
+    @media (max-width: 600px) {
+      .fields-row, .fields-row-2, .fields-row-4 { grid-template-columns: 1fr; }
+    }
+    .field-lbl { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 5px; font-weight: 500; }
+    .field-input { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; width: 100%; }
+    .field-input:focus { border-color: var(--blue); }
+    .field-input::placeholder { color: #B0BBC8; font-size: 13px; }
+    .field-gap { margin-top: 12px; }
+
+    .same-billing-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; cursor: pointer; }
+    .same-billing-row input[type=checkbox] { accent-color: var(--blue); width: 15px; height: 15px; cursor: pointer; }
+    .same-billing-row label { font-size: 13px; color: var(--muted); cursor: pointer; }
+
+    /* ======= PRODUCTS ======= */
+    .products-section { padding: 20px; border-bottom: 1px solid var(--border); }
+    .discount-badge { background: rgba(107,174,214,0.12); border: 1px solid rgba(107,174,214,0.3); color: var(--blue-dark); font-size: 9px; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 4px; margin-left: 8px; vertical-align: middle; font-weight: 700; }
+    .product-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--surface-2); }
+    .product-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .product-row:first-of-type { padding-top: 0; }
+    .product-name { font-size: 14px; font-weight: 500; color: var(--text); }
+    .product-price { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .qty-ctrl { display: flex; align-items: center; background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .qty-btn { background: none; border: none; color: var(--blue); font-size: 20px; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; font-weight: 300; line-height: 1; }
+    .qty-btn:active { background: rgba(107,174,214,0.15); }
+    .qty-num { width: 32px; text-align: center; font-size: 15px; font-weight: 600; color: var(--text); user-select: none; }
+
+    /* ACCESSORY COLLECTIONS */
+    .coll-block { margin-bottom: 12px; background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .coll-block:last-child { margin-bottom: 0; }
+    .coll-head { display: flex; align-items: center; justify-content: space-between; padding: 11px 15px; border-bottom: 1px solid var(--border); background: var(--surface); }
+    .coll-name { font-size: 12px; font-weight: 700; letter-spacing: 0.07em; color: var(--text); }
+    .coll-price { font-size: 13px; color: var(--blue); font-weight: 600; }
+    .coll-colors { display: grid; gap: 1px; background: var(--border); }
+    .coll-colors.four { grid-template-columns: repeat(4,1fr); }
+    .coll-colors.three { grid-template-columns: repeat(3,1fr); }
+    .color-cell { background: #fff; padding: 11px 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .dot-black { background: #1a1a1a; border: 1px solid #555; }
+    .dot-grey { background: #999; border: 1px solid #bbb; }
+    .dot-white { background: #F0F0F0; border: 1px solid #ccc; }
+    .dot-leopard { background: repeating-linear-gradient(45deg,#C4A35A 0px,#8B6914 4px,#3A2000 8px,#C4A35A 12px); border: 1px solid #8B6914; }
+    .color-label { font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); text-align: center; }
+    .color-qty-ctrl { display: flex; align-items: center; gap: 3px; }
+    .cqb { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; color: var(--blue); font-size: 16px; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background 0.15s; }
+    .cqb:active { background: rgba(107,174,214,0.2); }
+    .cqn { width: 18px; text-align: center; font-size: 13px; font-weight: 600; color: var(--text); user-select: none; }
+
+    /* NOTES */
+    .notes-textarea { width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 13px; font-family: inherit; outline: none; resize: none; height: 70px; transition: border-color 0.2s; }
+    .notes-textarea:focus { border-color: var(--blue); }
+    .notes-textarea::placeholder { color: #B0BBC8; }
+
+    /* ======= STICKY FOOTER ======= */
+    .sticky-foot { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.97); border-top: 2px solid var(--blue); padding: 12px 20px; display: flex; align-items: center; gap: 16px; z-index: 100; backdrop-filter: blur(10px); }
+    .total-wrap { flex: 1; }
+    .total-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+    .total-tax-note { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .total-amt { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--blue); line-height: 1.1; transition: transform 0.1s; }
+    .total-amt.bump { transform: scale(1.05); }
+    .submit-btn { background: var(--blue); color: #fff; border: none; border-radius: 10px; padding: 15px 26px; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; transition: opacity 0.2s, transform 0.1s; white-space: nowrap; font-family: inherit; }
+    .submit-btn:active { opacity: 0.8; transform: scale(0.97); }
+    .submit-btn:disabled { opacity: 0.45; cursor: default; }
+
+    /* ======= SUCCESS ======= */
+    #successScreen { flex-direction: column; align-items: center; padding: 70px 24px 120px; text-align: center; min-height: 100vh; background: var(--bg); }
+    .success-icon { width: 68px; height: 68px; background: rgba(61,155,122,0.1); border: 2px solid var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 28px; }
+    .success-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--text); margin-bottom: 8px; }
+    .success-meta { font-size: 12px; color: var(--muted); margin-bottom: 36px; }
+    .success-amount { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--blue); margin-bottom: 6px; }
+    .success-customer { font-size: 16px; color: var(--text); margin-bottom: 10px; }
+    .success-items { font-size: 12px; color: var(--muted); max-width: 340px; line-height: 1.7; margin-bottom: 44px; }
+    .next-btn { background: transparent; color: var(--blue); border: 2px solid var(--blue); border-radius: 10px; padding: 15px 52px; font-size: 14px; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .next-btn:hover { background: rgba(107,174,214,0.08); }
+
+    /* ======= ADMIN ======= */
+    #adminPanel { padding: 20px; min-height: 100vh; background: var(--bg); }
+    .admin-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .admin-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); }
+    .admin-count { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .admin-btns { display: flex; gap: 8px; }
+    .btn-sm { background: none; border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-family: inherit; }
+    .btn-sm-blue { background: none; border: 1px solid var(--blue); color: var(--blue); padding: 8px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-family: inherit; }
+    .order-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 10px; position: relative; }
+    .oc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .oc-left { flex: 1; }
+    .oc-name { font-weight: 600; font-size: 14px; color: var(--text); }
+    .oc-contact { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .oc-right { display: flex; align-items: center; gap: 12px; }
+    .oc-total { color: var(--blue); font-weight: 700; font-size: 16px; }
+    .oc-delete { background: none; border: none; color: #CCC; font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1; transition: color 0.2s; }
+    .oc-delete:hover { color: var(--error); }
+    .oc-items { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 6px; }
+    .oc-addr { font-size: 11px; color: #8A9AAA; margin-top: 4px; }
+    .oc-note { font-size: 11px; color: var(--blue-dark); margin-top: 4px; }
+    .oc-time { font-size: 10px; color: #C0CBD6; margin-top: 8px; letter-spacing: 0.04em; }
+    .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
+    .empty-icon { font-size: 36px; margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+
+<!-- ====== SETUP SCREEN ====== -->
+<div id="setupScreen">
+  <div class="setup-logo">AVJOU</div>
+  <div class="setup-sub">Cosmoprof Las Vegas · July 2026</div>
+  <div class="setup-card">
+    <div class="setup-title">Connect to Google Sheets</div>
+    <div class="setup-desc">Paste your Google Apps Script Web App URL below. Every order will automatically save to your sheet in real time. Only needs to be done once on this device.</div>
+    <input type="text" id="scriptUrlInput" class="setup-input" placeholder="https://script.google.com/macros/s/...">
+    <button class="btn-blue" onclick="saveScriptUrl()">Connect & Start</button>
+  </div>
+</div>
+
+<!-- ====== MAIN FORM ====== -->
+<div id="mainForm">
+  <div class="top-bar">
+    <div>
+      <div class="brand">AVJOU</div>
+      <div class="event-tag">Cosmoprof 2026 · Las Vegas</div>
+    </div>
+    <button class="orders-btn" onclick="showAdmin()">View Orders</button>
+  </div>
+
+  <!-- Customer Info -->
+  <div class="section">
+    <div class="section-label">Customer Information</div>
+    <div class="fields-row">
+      <div>
+        <div class="field-lbl">Full Name *</div>
+        <input type="text" id="custName" class="field-input" placeholder="Jane Smith" autocomplete="off">
+      </div>
+      <div>
+        <div class="field-lbl">Email *</div>
+        <input type="email" id="custEmail" class="field-input" placeholder="jane@example.com" autocomplete="off">
+      </div>
+      <div>
+        <div class="field-lbl">Phone *</div>
+        <input type="tel" id="custPhone" class="field-input" placeholder="(555) 000-0000" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <!-- Billing + Shipping Address (combined section) -->
+  <div class="section">
+    <div class="section-label">Billing Address</div>
+    <div class="field-lbl">Street Address *</div>
+    <input type="text" id="billStreet" class="field-input" placeholder="123 Main Street, Apt 4B" autocomplete="off">
+    <div class="field-gap"></div>
+    <div class="fields-row-4">
+      <div>
+        <div class="field-lbl">City *</div>
+        <input type="text" id="billCity" class="field-input" placeholder="Los Angeles" autocomplete="off">
+      </div>
+      <div>
+        <div class="field-lbl">State *</div>
+        <input type="text" id="billState" class="field-input" placeholder="CA" autocomplete="off">
+      </div>
+      <div>
+        <div class="field-lbl">ZIP *</div>
+        <input type="text" id="billZip" class="field-input" placeholder="90001" autocomplete="off">
+      </div>
+      <div>
+        <div class="field-lbl">Country</div>
+        <input type="text" id="billCountry" class="field-input" placeholder="USA" autocomplete="off">
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--border); margin: 20px 0;"></div>
+
+    <div class="section-label" style="margin-bottom:12px;">Shipping Address</div>
+    <div class="same-billing-row" style="margin-bottom:14px;">
+      <input type="checkbox" id="sameAsBilling" checked onchange="toggleShipping()">
+      <label for="sameAsBilling">Same as billing address</label>
+    </div>
+    <div id="shippingFields" style="display:none;">
+      <div class="field-lbl">Street Address</div>
+      <input type="text" id="shipStreet" class="field-input" placeholder="123 Main Street, Apt 4B" autocomplete="off">
+      <div class="field-gap"></div>
+      <div class="fields-row-4">
+        <div>
+          <div class="field-lbl">City</div>
+          <input type="text" id="shipCity" class="field-input" placeholder="Los Angeles" autocomplete="off">
+        </div>
+        <div>
+          <div class="field-lbl">State</div>
+          <input type="text" id="shipState" class="field-input" placeholder="CA" autocomplete="off">
+        </div>
+        <div>
+          <div class="field-lbl">ZIP</div>
+          <input type="text" id="shipZip" class="field-input" placeholder="90001" autocomplete="off">
+        </div>
+        <div>
+          <div class="field-lbl">Country</div>
+          <input type="text" id="shipCountry" class="field-input" placeholder="USA" autocomplete="off">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Haircare -->
+  <div class="products-section">
+    <div class="section-label">Haircare Products <span class="discount-badge">20% OFF</span></div>
+    <div class="product-row">
+      <div><div class="product-name">Avjou Serum</div><div class="product-price">$120 each</div></div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="updateQty('serum',-1)">−</button>
+        <div class="qty-num" id="qty_serum">0</div>
+        <button class="qty-btn" onclick="updateQty('serum',1)">+</button>
+      </div>
+    </div>
+    <div class="product-row">
+      <div><div class="product-name">Shampoo</div><div class="product-price">$48 each</div></div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="updateQty('shampoo',-1)">−</button>
+        <div class="qty-num" id="qty_shampoo">0</div>
+        <button class="qty-btn" onclick="updateQty('shampoo',1)">+</button>
+      </div>
+    </div>
+    <div class="product-row">
+      <div><div class="product-name">Hair Mask</div><div class="product-price">$52 each</div></div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="updateQty('hair_mask',-1)">−</button>
+        <div class="qty-num" id="qty_hair_mask">0</div>
+        <button class="qty-btn" onclick="updateQty('hair_mask',1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessories -->
+  <div class="products-section">
+    <div class="section-label">Hair Accessories <span class="discount-badge">20% OFF</span></div>
+
+    <div class="coll-block">
+      <div class="coll-head"><div class="coll-name">DONYA COLLECTION</div><div class="coll-price">$79 each</div></div>
+      <div class="coll-colors four">
+        <div class="color-cell"><div class="color-dot dot-black"></div><div class="color-label">Black</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('donya_Black',-1)">−</button><div class="cqn" id="qty_donya_Black">0</div><button class="cqb" onclick="updateQty('donya_Black',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-grey"></div><div class="color-label">Grey</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('donya_Grey',-1)">−</button><div class="cqn" id="qty_donya_Grey">0</div><button class="cqb" onclick="updateQty('donya_Grey',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-white"></div><div class="color-label">White</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('donya_White',-1)">−</button><div class="cqn" id="qty_donya_White">0</div><button class="cqb" onclick="updateQty('donya_White',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-leopard"></div><div class="color-label">Leopard</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('donya_Leopard',-1)">−</button><div class="cqn" id="qty_donya_Leopard">0</div><button class="cqb" onclick="updateQty('donya_Leopard',1)">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="coll-block">
+      <div class="coll-head"><div class="coll-name">REZ COLLECTION</div><div class="coll-price">$55 each</div></div>
+      <div class="coll-colors four">
+        <div class="color-cell"><div class="color-dot dot-black"></div><div class="color-label">Black</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('rez_Black',-1)">−</button><div class="cqn" id="qty_rez_Black">0</div><button class="cqb" onclick="updateQty('rez_Black',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-grey"></div><div class="color-label">Grey</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('rez_Grey',-1)">−</button><div class="cqn" id="qty_rez_Grey">0</div><button class="cqb" onclick="updateQty('rez_Grey',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-white"></div><div class="color-label">White</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('rez_White',-1)">−</button><div class="cqn" id="qty_rez_White">0</div><button class="cqb" onclick="updateQty('rez_White',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-leopard"></div><div class="color-label">Leopard</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('rez_Leopard',-1)">−</button><div class="cqn" id="qty_rez_Leopard">0</div><button class="cqb" onclick="updateQty('rez_Leopard',1)">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="coll-block">
+      <div class="coll-head"><div class="coll-name">FARAH COLLECTION</div><div class="coll-price">$47 each</div></div>
+      <div class="coll-colors four">
+        <div class="color-cell"><div class="color-dot dot-black"></div><div class="color-label">Black</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('farah_Black',-1)">−</button><div class="cqn" id="qty_farah_Black">0</div><button class="cqb" onclick="updateQty('farah_Black',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-grey"></div><div class="color-label">Grey</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('farah_Grey',-1)">−</button><div class="cqn" id="qty_farah_Grey">0</div><button class="cqb" onclick="updateQty('farah_Grey',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-white"></div><div class="color-label">White</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('farah_White',-1)">−</button><div class="cqn" id="qty_farah_White">0</div><button class="cqb" onclick="updateQty('farah_White',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-leopard"></div><div class="color-label">Leopard</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('farah_Leopard',-1)">−</button><div class="cqn" id="qty_farah_Leopard">0</div><button class="cqb" onclick="updateQty('farah_Leopard',1)">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="coll-block">
+      <div class="coll-head"><div class="coll-name">PARVIN COLLECTION</div><div class="coll-price">$55 each</div></div>
+      <div class="coll-colors three">
+        <div class="color-cell"><div class="color-dot dot-black"></div><div class="color-label">Black</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('parvin_Black',-1)">−</button><div class="cqn" id="qty_parvin_Black">0</div><button class="cqb" onclick="updateQty('parvin_Black',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-white"></div><div class="color-label">White</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('parvin_White',-1)">−</button><div class="cqn" id="qty_parvin_White">0</div><button class="cqb" onclick="updateQty('parvin_White',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-grey"></div><div class="color-label">Grey</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('parvin_Grey',-1)">−</button><div class="cqn" id="qty_parvin_Grey">0</div><button class="cqb" onclick="updateQty('parvin_Grey',1)">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="coll-block">
+      <div class="coll-head"><div class="coll-name">GHAZAL COLLECTION</div><div class="coll-price">$63 each</div></div>
+      <div class="coll-colors three">
+        <div class="color-cell"><div class="color-dot dot-black"></div><div class="color-label">Black</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('ghazal_Black',-1)">−</button><div class="cqn" id="qty_ghazal_Black">0</div><button class="cqb" onclick="updateQty('ghazal_Black',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-white"></div><div class="color-label">White</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('ghazal_White',-1)">−</button><div class="cqn" id="qty_ghazal_White">0</div><button class="cqb" onclick="updateQty('ghazal_White',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-grey"></div><div class="color-label">Grey</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('ghazal_Grey',-1)">−</button><div class="cqn" id="qty_ghazal_Grey">0</div><button class="cqb" onclick="updateQty('ghazal_Grey',1)">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="coll-block">
+      <div class="coll-head"><div class="coll-name">PARVANEH COLLECTION</div><div class="coll-price">$63 each</div></div>
+      <div class="coll-colors three">
+        <div class="color-cell"><div class="color-dot dot-black"></div><div class="color-label">Black</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('parvaneh_Black',-1)">−</button><div class="cqn" id="qty_parvaneh_Black">0</div><button class="cqb" onclick="updateQty('parvaneh_Black',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-white"></div><div class="color-label">White</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('parvaneh_White',-1)">−</button><div class="cqn" id="qty_parvaneh_White">0</div><button class="cqb" onclick="updateQty('parvaneh_White',1)">+</button></div></div>
+        <div class="color-cell"><div class="color-dot dot-grey"></div><div class="color-label">Grey</div><div class="color-qty-ctrl"><button class="cqb" onclick="updateQty('parvaneh_Grey',-1)">−</button><div class="cqn" id="qty_parvaneh_Grey">0</div><button class="cqb" onclick="updateQty('parvaneh_Grey',1)">+</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Candles -->
+  <div class="products-section">
+    <div class="section-label">Candles <span class="discount-badge">20% OFF</span></div>
+    <div class="product-row">
+      <div><div class="product-name">Candle – Scent 1</div><div class="product-price">$71 each</div></div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="updateQty('candle_1',-1)">−</button>
+        <div class="qty-num" id="qty_candle_1">0</div>
+        <button class="qty-btn" onclick="updateQty('candle_1',1)">+</button>
+      </div>
+    </div>
+    <div class="product-row">
+      <div><div class="product-name">Candle – Scent 2</div><div class="product-price">$71 each</div></div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="updateQty('candle_2',-1)">−</button>
+        <div class="qty-num" id="qty_candle_2">0</div>
+        <button class="qty-btn" onclick="updateQty('candle_2',1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="section">
+    <div class="section-label">Notes (optional)</div>
+    <textarea id="custNotes" class="notes-textarea" placeholder="Any special requests for this order..."></textarea>
+  </div>
+
+  <!-- Sticky Footer -->
+  <div class="sticky-foot">
+    <div class="total-wrap">
+      <div class="total-label">Total Due</div>
+      <div class="total-amt" id="orderTotal">$0.00</div>
+      <div class="total-tax-note" id="taxNote"></div>
+    </div>
+    <button class="submit-btn" id="submitBtn" onclick="submitOrder()">Confirm Pre-Order →</button>
+  </div>
+</div>
+
+<!-- ====== SUCCESS ====== -->
+<div id="successScreen">
+  <div class="success-icon">✓</div>
+  <div class="success-title">Order Confirmed</div>
+  <div class="success-meta" id="successMeta"></div>
+  <div class="success-amount" id="successAmount">$0</div>
+  <div class="success-customer" id="successCustomer"></div>
+  <div class="success-items" id="successItems"></div>
+  <button class="next-btn" onclick="nextOrder()">Next Customer →</button>
+</div>
+
+<!-- ====== ADMIN ====== -->
+<div id="adminPanel">
+  <div class="admin-bar">
+    <div>
+      <div class="admin-title">Orders</div>
+      <div class="admin-count" id="adminCount"></div>
+    </div>
+    <div class="admin-btns">
+      <button class="btn-sm-blue" onclick="exportCSV()">Export CSV</button>
+      <button class="btn-sm" onclick="showMain()">← Back</button>
+    </div>
+  </div>
+  <div id="ordersList"></div>
+</div>
+
+<script>
+  const PRICES = {
+    serum:120, shampoo:48, hair_mask:52,
+    donya_Black:79, donya_Grey:79, donya_White:79, donya_Leopard:79,
+    rez_Black:55, rez_Grey:55, rez_White:55, rez_Leopard:55,
+    farah_Black:47, farah_Grey:47, farah_White:47, farah_Leopard:47,
+    parvin_Black:55, parvin_White:55, parvin_Grey:55,
+    ghazal_Black:63, ghazal_White:63, ghazal_Grey:63,
+    parvaneh_Black:63, parvaneh_White:63, parvaneh_Grey:63,
+    candle_1:71, candle_2:71
+  };
+
+  const LABELS = {
+    serum:'Serum', shampoo:'Shampoo', hair_mask:'Hair Mask',
+    donya_Black:'Donya Black', donya_Grey:'Donya Grey', donya_White:'Donya White', donya_Leopard:'Donya Leopard',
+    rez_Black:'REZ Black', rez_Grey:'REZ Grey', rez_White:'REZ White', rez_Leopard:'REZ Leopard',
+    farah_Black:'Farah Black', farah_Grey:'Farah Grey', farah_White:'Farah White', farah_Leopard:'Farah Leopard',
+    parvin_Black:'Parvin Black', parvin_White:'Parvin White', parvin_Grey:'Parvin Grey',
+    ghazal_Black:'Ghazal Black', ghazal_White:'Ghazal White', ghazal_Grey:'Ghazal Grey',
+    parvaneh_Black:'Parvaneh Black', parvaneh_White:'Parvaneh White', parvaneh_Grey:'Parvaneh Grey',
+    candle_1:'Candle Scent 1', candle_2:'Candle Scent 2'
+  };
+
+  const ROW_KEYS = [
+    'serum','shampoo','hair_mask',
+    'donya_Black','donya_Grey','donya_White','donya_Leopard',
+    'rez_Black','rez_Grey','rez_White','rez_Leopard',
+    'farah_Black','farah_Grey','farah_White','farah_Leopard',
+    'parvin_Black','parvin_White','parvin_Grey',
+    'ghazal_Black','ghazal_White','ghazal_Grey',
+    'parvaneh_Black','parvaneh_White','parvaneh_Grey',
+    'candle_1','candle_2'
+  ];
+
+  const TAX_RATE = 0.1025;
+  let quantities = {};
+  let subtotalValue = 0, taxValue = 0, totalValue = 0;
+
+  window.onload = function() {
+    const url = localStorage.getItem('avjou_script_url');
+    show(url ? 'mainForm' : 'setupScreen');
+  };
+
+  function show(id) {
+    ['setupScreen','mainForm','successScreen','adminPanel'].forEach(s => {
+      const el = document.getElementById(s);
+      const isFlexScreen = (s === 'setupScreen' || s === 'successScreen');
+      el.style.display = (s === id) ? (isFlexScreen ? 'flex' : 'block') : 'none';
+    });
+  }
+
+  function saveScriptUrl() {
+    const url = document.getElementById('scriptUrlInput').value.trim();
+    if (!url.includes('script.google.com')) {
+      alert('Please paste a valid Google Apps Script URL');
+      return;
+    }
+    localStorage.setItem('avjou_script_url', url);
+    show('mainForm');
+  }
+
+  function toggleShipping() {
+    const checked = document.getElementById('sameAsBilling').checked;
+    document.getElementById('shippingFields').style.display = checked ? 'none' : 'block';
+  }
+
+  function updateQty(key, delta) {
+    quantities[key] = Math.max(0, (quantities[key] || 0) + delta);
+    document.getElementById('qty_' + key).textContent = quantities[key];
+    recalcTotal();
+  }
+
+  function recalcTotal() {
+    let sub = 0;
+    Object.keys(quantities).forEach(k => { sub += (quantities[k] || 0) * (PRICES[k] || 0); });
+    subtotalValue = sub;
+    taxValue = sub * TAX_RATE;
+    totalValue = sub + taxValue;
+    const el = document.getElementById('orderTotal');
+    el.textContent = '$' + totalValue.toFixed(2);
+    document.getElementById('taxNote').textContent = sub > 0
+      ? 'Subtotal $' + sub.toFixed(2) + ' + Tax $' + taxValue.toFixed(2)
+      : '';
+    el.classList.add('bump');
+    setTimeout(() => el.classList.remove('bump'), 120);
+  }
+
+  function getAddress(prefix) {
+    const s = v => document.getElementById(prefix + 'Street').value.trim();
+    const c = v => document.getElementById(prefix + 'City').value.trim();
+    const st = v => document.getElementById(prefix + 'State').value.trim();
+    const z = v => document.getElementById(prefix + 'Zip').value.trim();
+    const co = v => document.getElementById(prefix + 'Country').value.trim();
+    const parts = [
+      document.getElementById(prefix + 'Street').value.trim(),
+      document.getElementById(prefix + 'City').value.trim(),
+      document.getElementById(prefix + 'State').value.trim(),
+      document.getElementById(prefix + 'Zip').value.trim(),
+      document.getElementById(prefix + 'Country').value.trim()
+    ].filter(Boolean);
+    return parts.join(', ');
+  }
+
+  async function submitOrder() {
+    const name  = document.getElementById('custName').value.trim();
+    const email = document.getElementById('custEmail').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const notes = document.getElementById('custNotes').value.trim();
+    const billAddr = getAddress('bill');
+
+    if (!name || !email || !phone) { alert('Please fill in Name, Email, and Phone.'); return; }
+    if (!billAddr) { alert('Please fill in a billing address.'); return; }
+    if (totalValue === 0) { alert('Please select at least one product.'); return; }
+
+    const sameAddr = document.getElementById('sameAsBilling').checked;
+    const shipAddr = sameAddr ? billAddr : getAddress('ship');
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+
+    const timestamp = new Date().toLocaleString('en-US', {
+      month:'2-digit', day:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true
+    });
+
+    const itemsSummary = ROW_KEYS.filter(k => quantities[k] > 0).map(k => LABELS[k] + ' ×' + quantities[k]).join(', ');
+
+    const row = [
+      timestamp, name, email, phone, billAddr, shipAddr,
+      ...ROW_KEYS.map(k => quantities[k] || 0),
+      '$' + subtotalValue.toFixed(2),
+      '$' + taxValue.toFixed(2),
+      '$' + totalValue.toFixed(2),
+      notes
+    ];
+
+    // Save locally
+    const saved = JSON.parse(localStorage.getItem('avjou_orders') || '[]');
+    saved.push({ timestamp, name, email, phone, billAddr, shipAddr, items: itemsSummary, subtotal: '$'+subtotalValue.toFixed(2), tax: '$'+taxValue.toFixed(2), total: '$'+totalValue.toFixed(2), notes });
+    localStorage.setItem('avjou_orders', JSON.stringify(saved));
+
+    // Send to Google Sheet
+    const scriptUrl = localStorage.getItem('avjou_script_url');
+    let sheetOk = false;
+    if (scriptUrl) {
+      try {
+        await fetch(scriptUrl + '?row=' + encodeURIComponent(JSON.stringify(row)), { mode: 'no-cors' });
+        sheetOk = true;
+      } catch(err) { console.warn('Sheet sync failed:', err); }
+    }
+
+    document.getElementById('successAmount').textContent   = '$' + totalValue.toFixed(2);
+    document.getElementById('successCustomer').textContent = name;
+    document.getElementById('successItems').textContent    = itemsSummary;
+    document.getElementById('successMeta').textContent     = 'Subtotal $'+subtotalValue.toFixed(2)+' + Tax $'+taxValue.toFixed(2)+' · '+(sheetOk?'Saved to Sheets':'Saved locally')+' · '+timestamp;
+
+    btn.disabled = false; btn.textContent = 'Confirm Pre-Order →';
+    show('successScreen');
+    window.scrollTo(0,0);
+  }
+
+  function nextOrder() {
+    quantities = {};
+    document.querySelectorAll('[id^="qty_"]').forEach(el => el.textContent = '0');
+    ['custName','custEmail','custPhone','custNotes','billStreet','billCity','billState','billZip','billCountry','shipStreet','shipCity','shipState','shipZip','shipCountry'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('sameAsBilling').checked = true;
+    document.getElementById('shippingFields').style.display = 'none';
+    subtotalValue = taxValue = totalValue = 0;
+    document.getElementById('orderTotal').textContent = '$0.00';
+    document.getElementById('taxNote').textContent = '';
+    show('mainForm');
+    window.scrollTo(0,0);
+  }
+
+  function showAdmin() {
+    const orders = JSON.parse(localStorage.getItem('avjou_orders') || '[]');
+    const totalRev = orders.reduce((s,o) => s + parseFloat((o.total||'$0').replace('$','').replace(',','')), 0);
+    document.getElementById('adminCount').textContent = orders.length + ' order'+(orders.length!==1?'s':'')+
+      (orders.length>0 ? ' · $'+totalRev.toFixed(2)+' total revenue' : '');
+
+    const list = document.getElementById('ordersList');
+    if (!orders.length) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div>No orders yet</div></div>';
+    } else {
+      list.innerHTML = orders.slice().reverse().map((o, revIdx) => {
+        const realIdx = orders.length - 1 - revIdx;
+        return `<div class="order-card" id="oc_${realIdx}">
+          <div class="oc-top">
+            <div class="oc-left">
+              <div class="oc-name">${o.name}</div>
+              <div class="oc-contact">${o.email} · ${o.phone}</div>
+            </div>
+            <div class="oc-right">
+              <div class="oc-total">${o.total}</div>
+              <button class="oc-delete" onclick="deleteOrder(${realIdx})" title="Delete order">×</button>
+            </div>
+          </div>
+          ${o.items ? `<div class="oc-items">${o.items}</div>` : ''}
+          ${o.billAddr ? `<div class="oc-addr">📦 Bill: ${o.billAddr}</div>` : ''}
+          ${o.shipAddr && o.shipAddr !== o.billAddr ? `<div class="oc-addr">🚚 Ship: ${o.shipAddr}</div>` : ''}
+          ${o.subtotal ? `<div class="oc-addr">Subtotal ${o.subtotal} + Tax ${o.tax}</div>` : ''}
+          ${o.notes ? `<div class="oc-note">Note: ${o.notes}</div>` : ''}
+          <div class="oc-time">${o.timestamp}</div>
+        </div>`;
+      }).join('');
+    }
+    show('adminPanel');
+  }
+
+  function deleteOrder(idx) {
+    if (!confirm('Delete this order? This only removes it from this device.')) return;
+    const orders = JSON.parse(localStorage.getItem('avjou_orders') || '[]');
+    orders.splice(idx, 1);
+    localStorage.setItem('avjou_orders', JSON.stringify(orders));
+    showAdmin();
+  }
+
+  function showMain() { show('mainForm'); }
+
+  function exportCSV() {
+    const orders = JSON.parse(localStorage.getItem('avjou_orders') || '[]');
+    if (!orders.length) { alert('No orders to export yet.'); return; }
+    const rows = [
+      ['Timestamp','Name','Email','Phone','Billing Address','Shipping Address','Items','Subtotal','Tax','Total','Notes'],
+      ...orders.map(o => [
+        o.timestamp, o.name, o.email, o.phone,
+        '"'+(o.billAddr||'')+'"',
+        '"'+(o.shipAddr||'')+'"',
+        '"'+(o.items||'')+'"',
+        o.subtotal, o.tax, o.total,
+        '"'+(o.notes||'')+'"'
+      ])
+    ];
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type:'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'avjou_cosmoprof_'+new Date().toISOString().slice(0,10)+'.csv';
+    a.click(); URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>
